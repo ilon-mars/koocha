@@ -1,0 +1,2 @@
+# Проверка формата сообщения коммита
+npx --no-install commitlint --edit "$1"
