@@ -1,0 +1,12 @@
+{
+  "*.{js,jsx,ts,tsx,vue}": [
+    "eslint --fix",
+    "prettier --write"
+  ],
+  "*.{ts,tsx,vue}": [
+    "vue-tsc --noEmit --skipLibCheck"
+  ],
+  "*.{test.ts,spec.ts}": [
+    "vitest related --run"
+  ]
+}
