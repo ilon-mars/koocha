@@ -57,7 +57,6 @@ const onSubmit = (e: Event) => {
   flex-direction: column;
   padding: 20px;
   gap: 10px;
-  /* max-width: 360px; */
 }
 
 .error {
