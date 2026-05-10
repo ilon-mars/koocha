@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { UIInput } from '@/components/ui/input';
+import { UIButton } from '@/components/ui/button';
 import { CreateTaskSchema, type CreateTaskDto } from '@/domain/task';
+import DueDatePicker from './DueDatePicker.vue';
+import PrioritySelect from './PrioritySelect.vue';
 
 const title = ref('');
 const description = ref('');
@@ -33,16 +37,17 @@ const onSubmit = (e: Event) => {
 
 <template>
   <form :class="$style.wrapper" @submit="onSubmit">
-    <input v-model="title" placeholder="Название" type="text" />
-    <input v-model="description" placeholder="Описание" type="text" />
+    <UIInput v-model="title" placeholder="Название" type="text" />
+    <UIInput v-model="description" placeholder="Описание" type="text" />
 
-    <span>дата</span>
+    <DueDatePicker />
+    <PrioritySelect />
 
     <ul v-if="errors.length">
-      <li v-for="(error, i) in errors" :key="i">{{ error }}</li>
+      <li v-for="(error, i) in errors" :key="i" :class="$style.error">{{ error }}</li>
     </ul>
 
-    <button @click="onSubmit">Создать</button>
+    <UIButton variant="ghost" @click="onSubmit">Создать</UIButton>
   </form>
 </template>
 
@@ -51,8 +56,11 @@ const onSubmit = (e: Event) => {
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background-color: var(--color-background);
-  border: 1px solid var(--color-border);
   gap: 10px;
+  /* max-width: 360px; */
+}
+
+.error {
+  color: var(--color-destructive);
 }
 </style>

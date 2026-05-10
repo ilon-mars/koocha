@@ -4,8 +4,8 @@ import { format, isSameDay } from 'date-fns';
 import TaskList from '@/components/TaskList.vue';
 import { useTaskStore } from '@/stores/tasks';
 import AddTaskBtn from '@/components/AddTaskBtn.vue';
-import AddTaskCard from '@/components/AddTaskCard.vue';
 import type { CreateTaskDto } from '@/domain/task';
+import AddTaskDrawer from '@/components/AddTaskDrawer.vue';
 
 const store = useTaskStore();
 
@@ -37,9 +37,8 @@ onMounted(() => {
     <TaskList title="Куча" :tasks="unassignedTasks" />
     <TaskList :title="todayDate" :tasks="todayTasks" />
 
-    <AddTaskCard v-if="isTaskCardVisible" :class="$style.addTaskCard" @submit="addTask" />
-
     <AddTaskBtn :class="$style.addBtn" @click="toggleTaskCard" />
+    <AddTaskDrawer v-model:open="isTaskCardVisible" @addTask="addTask" />
   </div>
 </template>
 
@@ -60,13 +59,6 @@ onMounted(() => {
     left: 50%;
     transform: translate(50%, -50%);
   }
-}
-
-.addTaskCard {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .addBtn {
