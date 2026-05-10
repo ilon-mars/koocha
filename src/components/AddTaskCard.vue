@@ -1,18 +1,33 @@
 <script setup lang="ts">
-import type { Task } from '@/domain/task';
 import { ref } from 'vue';
+import { CreateTaskSchema, type CreateTaskDto } from '@/domain/task';
 
 const title = ref('');
 const description = ref('');
 
+const errors = ref<string[]>([]);
+
 const emit = defineEmits<{
-  submit: [task: Pick<Task, 'title' | 'description'>];
+  submit: [task: CreateTaskDto];
 }>();
 
 const onSubmit = (e: Event) => {
   e.preventDefault();
 
-  emit('submit', { title: title.value, description: description.value });
+  errors.value = [];
+
+  const result = CreateTaskSchema.safeParse({
+    title: title.value,
+    description: description.value,
+  });
+
+  if (!result.success) {
+    result.error.issues.forEach((issue) => errors.value.push(issue.message));
+
+    return;
+  }
+
+  emit('submit', result.data);
 };
 </script>
 
@@ -22,6 +37,10 @@ const onSubmit = (e: Event) => {
     <input v-model="description" placeholder="Описание" type="text" />
 
     <span>дата</span>
+
+    <ul v-if="errors.length">
+      <li v-for="(error, i) in errors" :key="i">{{ error }}</li>
+    </ul>
 
     <button @click="onSubmit">Создать</button>
   </form>

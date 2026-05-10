@@ -5,7 +5,7 @@ import TaskList from '@/components/TaskList.vue';
 import { useTaskStore } from '@/stores/tasks';
 import AddTaskBtn from '@/components/AddTaskBtn.vue';
 import AddTaskCard from '@/components/AddTaskCard.vue';
-import type { Task } from '@/domain/task';
+import type { CreateTaskDto } from '@/domain/task';
 
 const store = useTaskStore();
 
@@ -16,8 +16,8 @@ function toggleTaskCard() {
   isTaskCardVisible.value = !isTaskCardVisible.value;
 }
 
-async function addTask(payload: Pick<Task, 'title' | 'description'>) {
-  await store.createTask(payload.title);
+async function addTask(payload: CreateTaskDto) {
+  await store.createTask(payload);
   isTaskCardVisible.value = false;
 }
 

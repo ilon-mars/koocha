@@ -1,27 +1,26 @@
-import { defineStore } from 'pinia'
-import { ref } from 'vue'
-
-import { injector } from '@/composition/core'
-import { TOKENS } from '@/composition'
-import type { Task } from '@/domain/task'
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import { injector } from '@/composition/core';
+import { TOKENS } from '@/composition';
+import type { CreateTaskDto, Task } from '@/domain/task';
 
 export const useTaskStore = defineStore('tasks', () => {
-  const taskService = injector.resolve(TOKENS.taskService)
+  const taskService = injector.resolve(TOKENS.taskService);
 
-  const tasks = ref<Task[]>([])
-  const isLoading = ref(false)
+  const tasks = ref<Task[]>([]);
+  const isLoading = ref(false);
 
   async function loadTasks() {
-    isLoading.value = true
+    isLoading.value = true;
 
-    tasks.value = await taskService.getTasks()
+    tasks.value = await taskService.getTasks();
 
-    isLoading.value = false
+    isLoading.value = false;
   }
 
-  async function createTask(title: string) {
-    await taskService.createTask(title)
-    await loadTasks()
+  async function createTask(payload: CreateTaskDto) {
+    await taskService.createTask(payload);
+    await loadTasks();
   }
 
   // async function deleteTask(id: string) {
@@ -35,5 +34,5 @@ export const useTaskStore = defineStore('tasks', () => {
     loadTasks,
     createTask,
     // deleteTask,
-  }
-})
+  };
+});
