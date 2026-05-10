@@ -16,9 +16,7 @@ withDefaults(defineProps<Props>(), {
     <h2 class="listTitle" :class="$style.title">{{ title }}</h2>
 
     <ul>
-      <li v-for="task in tasks" :key="task.id">
-        {{ task.title }}
-      </li>
+      <li v-for="task in tasks" :key="task.id">{{ task.title }} - {{ task.dueDate }}</li>
     </ul>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
-
+import { computed, onMounted, ref } from 'vue';
+import { format, isSameDay } from 'date-fns';
 import TaskList from '@/components/TaskList.vue';
 import { useTaskStore } from '@/stores/tasks';
 import AddTaskBtn from '@/components/AddTaskBtn.vue';
@@ -10,16 +10,22 @@ import type { CreateTaskDto } from '@/domain/task';
 const store = useTaskStore();
 
 const isTaskCardVisible = ref(false);
-const todayDate = new Date().toLocaleDateString('ru-RU');
+const todayDate = format(new Date(), 'dd.MM.yyyy');
 
-function toggleTaskCard() {
+const unassignedTasks = computed(() => store.tasks.filter((task) => !task.dueDate));
+
+const todayTasks = computed(() =>
+  store.tasks.filter((task) => task.dueDate && isSameDay(task.dueDate, new Date())),
+);
+
+const toggleTaskCard = () => {
   isTaskCardVisible.value = !isTaskCardVisible.value;
-}
+};
 
-async function addTask(payload: CreateTaskDto) {
+const addTask = async (payload: CreateTaskDto) => {
   await store.createTask(payload);
   isTaskCardVisible.value = false;
-}
+};
 
 onMounted(() => {
   store.loadTasks();
@@ -28,8 +34,8 @@ onMounted(() => {
 
 <template>
   <div :class="$style.wrapper">
-    <TaskList title="Куча" :tasks="store.tasks" />
-    <TaskList :title="todayDate" :tasks="store.tasks" />
+    <TaskList title="Куча" :tasks="unassignedTasks" />
+    <TaskList :title="todayDate" :tasks="todayTasks" />
 
     <AddTaskCard v-if="isTaskCardVisible" :class="$style.addTaskCard" @submit="addTask" />
 
